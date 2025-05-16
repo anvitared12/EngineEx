@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Engine Info Form</title>
+</head>
+<body>
+    <h1>Enter Engine Details</h1>
+    <form action="/engine-info" method="POST">
+        <label>Engine Number: <input type="text" name="EngineNumber" required></label><br><br>
+        <label>Displacement: <input type="text" name="Displacement" required></label><br><br>
+        <label>Power Output: <input type="text" name="Power_Output" required></label><br><br>
+        <label>Emission Norm: <input type="text" name="Emmision_Norm" required></label><br><br>
+        <label>Fuel Type: <input type="text" name="FuelType" required></label><br><br>
+        <button type="submit">Check</button>
+    </form>
+
+    <% if (result) { %>
+        <h2>Results:</h2>
+        <ul>
+            <% result.forEach(item => { %>
+                <li>
+                    <% for (let key in item) { %>
+                        <strong><%= key %>:</strong> <%= item[key] %><br>
+                    <% } %>
+                </li>
+                <br>
+            <% }) %>
+        </ul>
+    <% } %>
+</body>
+</html>
