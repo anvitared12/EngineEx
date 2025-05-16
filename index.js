@@ -1,6 +1,16 @@
 const express = require("express");
 const app = express();
 const path = require("path");
+const mongoose = require("mongoose");
+const EngineInput = require("./models/EngineInput");
+
+
+mongoose.connect("mongodb+srv://anvitasreddy:FsPIjuXvsExySgTc@cluster0.j4et72w.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
+.then(() => console.log("✅ Connected to MongoDB Atlas"))
+.catch((err) => console.error("❌ MongoDB connection failed:", err));
 
 app.use(express.urlencoded({ extended: true })); // For form data
 app.set("view engine", "ejs");
@@ -19,10 +29,26 @@ app.post("/engine-info", (req, res) => {
         FuelType
     } = req.body;
 
+    // ✅ Save to MongoDB
+    const newEntry = new EngineInput({
+        EngineNumber,
+        Displacement,
+        Power_Output,
+        Emmision_Norm,
+        FuelType
+    });
+
+    newEntry.save()
+        .then(() => console.log("✅ Engine data saved to DB"))
+        .catch(err => console.error("❌ Error saving to DB:", err));
+
     const isPowerInRange = (power, min, max) => {
         const numeric = parseInt(power);
         return numeric >= min && numeric <= max;
     };
+
+    // Matching logic continues below...
+
 
     // First block of conditions
     if (
